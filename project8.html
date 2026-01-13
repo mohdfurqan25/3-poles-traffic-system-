@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3-Pole Traffic System</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Lights sit on the "ground" */
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+            gap: 60px;
+            padding-bottom: 50px;
+        }
+
+        /* The Pole Structure */
+        .pole-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .signal-box {
+            width: 80px;
+            height: 220px;
+            background: #333;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 3px solid #444;
+        }
+
+        .post {
+            width: 15px;
+            height: 150px;
+            background: #555;
+        }
+
+        .base {
+            width: 80px;
+            height: 10px;
+            background: #444;
+            border-radius: 5px;
+        }
+
+        /* Lamp Styles */
+        .lamp {
+            width: 50px;
+            height: 50px;
+            background: #111;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        /* Colors when active */
+        .red.active { background: #ff4136; box-shadow: 0 0 20px #ff4136; }
+        .yellow.active { background: #ffdc00; box-shadow: 0 0 20px #ffdc00; }
+        .green.active { background: #2ecc40; box-shadow: 0 0 20px #2ecc40; }
+    </style>
+</head>
+<body>
+
+    <div class="pole-container" id="pole1">
+        <div class="signal-box">
+            <div class="lamp red"></div>
+            <div class="lamp yellow"></div>
+            <div class="lamp green"></div>
+        </div>
+        <div class="post"></div>
+        <div class="base"></div>
+    </div>
+
+    <div class="pole-container" id="pole2">
+        <div class="signal-box">
+            <div class="lamp red"></div>
+            <div class="lamp yellow"></div>
+            <div class="lamp green"></div>
+        </div>
+        <div class="post"></div>
+        <div class="base"></div>
+    </div>
+
+    <div class="pole-container" id="pole3">
+        <div class="signal-box">
+            <div class="lamp red"></div>
+            <div class="lamp yellow"></div>
+            <div class="lamp green"></div>
+        </div>
+        <div class="post"></div>
+        <div class="base"></div>
+    </div>
+
+    <script>
+        const poles = [
+            document.getElementById('pole1'),
+            document.getElementById('pole2'),
+            document.getElementById('pole3')
+        ];
+
+        function setPoleColor(poleIndex, color) {
+            const lamps = poles[poleIndex].querySelectorAll('.lamp');
+            // Reset all lamps on this pole
+            lamps.forEach(l => l.classList.remove('active'));
+            
+            // Activate specific lamp
+            if (color === 'red') lamps[0].classList.add('active');
+            if (color === 'yellow') lamps[1].classList.add('active');
+            if (color === 'green') lamps[2].classList.add('active');
+        }
+
+        function runTrafficLogic() {
+            // Initial State: 1:Green, 2:Yellow, 3:Red
+            setPoleColor(0, 'green');
+            setPoleColor(1, 'yellow');
+            setPoleColor(2, 'red');
+
+            // Move the Green to Pole 2
+            setTimeout(() => {
+                setPoleColor(0, 'red');
+                setPoleColor(1, 'green');
+                setPoleColor(2, 'yellow');
+            }, 4000);
+
+            // Move the Green to Pole 3
+            setTimeout(() => {
+                setPoleColor(0, 'yellow');
+                setPoleColor(1, 'red');
+                setPoleColor(2, 'green');
+            }, 8000);
+        }
+
+        // Start the logic
+        runTrafficLogic();
+
+        // Use setInterval to loop the 12-second total cycle
+        setInterval(runTrafficLogic, 12000);
+    </script>
+</body>
+</html>
+
